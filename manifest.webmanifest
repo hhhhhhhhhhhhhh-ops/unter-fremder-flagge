@@ -1,0 +1,11 @@
+{
+  "name": "Unter fremder Flagge",
+  "short_name": "Fremde Flagge",
+  "description": "3D-U-Boot-Abenteuer mit offener See und Kampagne",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0b1519",
+  "theme_color": "#0b1519",
+  "icons": [{"src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable"}]
+}
