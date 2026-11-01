@@ -2315,13 +2315,25 @@
     // Touch
     const stick = el.querySelector('.cmd-stick'), knob = stick.querySelector('i');
     const setStick = (e) => { const r = stick.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2; let dx = (e.clientX - cx) / (r.width / 2), dy = (e.clientY - cy) / (r.height / 2); const m = Math.hypot(dx, dy); if (m > 1) { dx /= m; dy /= m; } S.tx = Math.abs(dx) > 0.2 ? dx : 0; S.ty = Math.abs(dy) > 0.2 ? dy : 0; knob.style.transform = 'translate(' + dx * 24 + 'px,' + dy * 24 + 'px)'; };
-    stick.addEventListener('pointerdown', (e) => { stick.setPointerCapture(e.pointerId); setStick(e); });
-    stick.addEventListener('pointermove', (e) => { if (e.buttons || e.pressure) setStick(e); });
-    stick.addEventListener('pointerup', () => { S.tx = 0; S.ty = 0; knob.style.transform = ''; });
+    let activeStickPointer = null;
+    const resetStick = (e) => {
+      if (activeStickPointer === null || (e && e.pointerId !== activeStickPointer)) return;
+      activeStickPointer = null;
+      if (S) { S.tx = 0; S.ty = 0; }
+      knob.style.transform = '';
+    };
+    stick.addEventListener('pointerdown', (e) => {
+      if (!C.active || !S || activeStickPointer !== null) return;
+      e.preventDefault(); activeStickPointer = e.pointerId;
+      stick.setPointerCapture(e.pointerId); setStick(e);
+    });
+    stick.addEventListener('pointermove', (e) => { if (activeStickPointer === e.pointerId && S) setStick(e); });
+    for (const name of ['pointerup', 'pointercancel', 'lostpointercapture']) stick.addEventListener(name, resetStick);
     el.querySelectorAll('.cmd-touch button').forEach((b) => {
       const a = b.dataset.a;
       b.addEventListener('pointerdown', (e) => { e.preventDefault(); if (a === 'act') S.keys.KeyE = true; else if (a === 'hit') takedown(); else if (a === 'throw') throwBottle(); else if (a === 'shoot') { const t = S.guards.filter((g) => !g.down).sort((x, y) => dist(x, S.p) - dist(y, S.p))[0]; if (t) { S.mx = t.x; S.my = t.y; } else { S.mx = S.p.x + Math.cos(S.p.a) * 100; S.my = S.p.y + Math.sin(S.p.a) * 100; } shoot(); } });
-      b.addEventListener('pointerup', () => { if (a === 'act') S.keys.KeyE = false; }); b.addEventListener('pointerleave', () => { if (a === 'act') S.keys.KeyE = false; });
+      const releaseAction = () => { if (S && a === 'act') S.keys.KeyE = false; };
+      for (const name of ['pointerup', 'pointercancel', 'pointerleave', 'lostpointercapture']) b.addEventListener(name, releaseAction);
     });
   };
 

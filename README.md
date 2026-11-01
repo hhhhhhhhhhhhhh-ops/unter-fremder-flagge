@@ -73,3 +73,7 @@ Die Spiellogik und Texte basieren auf der vom Nutzer bereitgestellten Datei `Unt
 ## Steuerungs-Fixes (2.1)
 
 Touch-Joystick und Gamepad sind getrennte Eingabequellen; aktive Touch-Eingabe hat Vorrang. Abgebrochene Pointer-Ereignisse feuern keinen Torpedo. Fokusverlust und geschlossene Menüs lösen gehaltene Tasten aus. Die Tests stehen in `tests/controls.test.cjs`.
+
+## Nachtest 2.2
+
+Landgang-Touchstick ignoriert fremde Pointer und setzt nach pointercancel/lostpointercapture auf neutral; Aktion wird auch bei Abbruch freigegeben. Automatisierte Tests: `node --test tests/*.cjs`. Reale WebGL-/Gerätetests bleiben separat erforderlich.

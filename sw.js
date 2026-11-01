@@ -1,5 +1,5 @@
 /* Statische PWA-Caches; keine Spielstände und keine Nutzerdaten auf dem Server. */
-const CACHE = 'uff-static-v2-controls-1';
+const CACHE = 'uff-static-v2-landgang-2';
 const SHELL = ['./', './index.html', './game.js', './manifest.webmanifest', './icon.svg'];
 const THREE_URL = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
 const ALLOWED_CDN = new Set(['cdnjs.cloudflare.com', 'cdn.jsdelivr.net', 'unpkg.com']);
